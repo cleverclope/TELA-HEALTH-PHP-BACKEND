@@ -11,9 +11,10 @@
     use Pecee\Http\Middleware\Exceptions\TokenMismatchException;
     use Pecee\SimpleRouter\Exceptions\NotFoundHttpException;
     use Pecee\SimpleRouter\SimpleRouter;
+    use tenna_health\Attendance;
     use tenna_health\Readings;
     use tenna_health\Schools;
-    use tenna_health\Students;
+    use tenna_health\Users;
 
     spl_autoload_register(function ($className) {
         $classNameParts = explode('\\', $className);
@@ -35,13 +36,28 @@
 
         SimpleRouter::group(['prefix' => '/schools'], function () {
             SimpleRouter::post('/save', fn() => (new Schools())->save_school());
-            SimpleRouter::post('/login', fn() => (new Schools())->login_school());
+            SimpleRouter::post('/classes', fn() => (new Schools())->save_classes());
             SimpleRouter::get('/get', fn() => (new Schools())->get_schools());
+            SimpleRouter::post('/login', fn() => (new Schools())->login_school());
+            SimpleRouter::get('/init', fn() => (new Schools())->initialise_data());
         });
 
-        SimpleRouter::group(['prefix' => '/students'], function () {
-            SimpleRouter::post('/save', fn() => (new Students())->save_student());
-            SimpleRouter::get('/get', fn() => (new Students())->get_students());
+        SimpleRouter::group(['prefix' => '/users'], function () {
+            SimpleRouter::post('/photo', fn() => (new Users())->attach_photo());
+
+            SimpleRouter::group(['prefix' => '/students'], function () {
+                SimpleRouter::post('/save', fn() => (new Users())->save_student());
+                SimpleRouter::get('/get', fn() => (new Users())->get_students());
+            });
+            SimpleRouter::group(['prefix' => '/staff'], function () {
+                SimpleRouter::post('/save', fn() => (new Users())->save_staff());
+                SimpleRouter::get('/get', fn() => (new Users())->get_staffs());
+            });
+            SimpleRouter::group(['prefix' => '/attendance'], function () {
+                SimpleRouter::post('/check_in', fn() => (new Attendance())->save_check_in());
+                SimpleRouter::post('/check_out', fn() => (new Attendance())->save_check_out());
+                SimpleRouter::get('/lists', fn() => (new Attendance())->get_attendances());
+            });
         });
 
         SimpleRouter::group(['prefix' => '/readings'], function () {

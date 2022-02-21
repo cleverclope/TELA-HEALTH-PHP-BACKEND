@@ -14,11 +14,9 @@
 
         public function save_readings() {
             try {
-                $statement = $this->connection->prepare("insert into readings (student_id, time_read, temperature) VALUES 
-                                    (student_id, time_read, temperature)");
-                $statement->execute([
-                    'student_id' => $_POST['student_id'], 'temperature' => $_POST['temperature'], 'time_read' => current_time
-                ]);
+                $statement = $this->connection->prepare("insert into readings (user_id, time_read, temperature) VALUES 
+                                    (user_id, time_read, temperature)");
+                $statement->execute(['user_id' => $_POST['user_id'], 'temperature' => $_POST['temperature'], 'time_read' => current_time]);
                 return server_response(1, 'Reading saved successfully');
             } catch (Exception $exception) {
                 return server_error($exception);
@@ -63,11 +61,10 @@
 
         public function get_readings() {
             try {
-                $statement = $this->connection->prepare("select results_id, s.student_id, s.school_id, school_name,
+                $statement = $this->connection->prepare("select results_id, u.user_id, u.last_name, u.face_gender, u.date_of_birth,
                                             temperature, time_read
                                         from readings
-                                            inner join students s on readings.student_id = s.student_id
-                                            inner join schools s2 on s.school_id = s2.school_id
+                                            inner join users u on readings.user_id = u.user_id
                                             left join readings_covid rc on readings.results_id = rc.reading_id");
                 $statement->execute();
                 return server_response(1, 'Readings Data', ['readings' => $statement->fetchAll()]);

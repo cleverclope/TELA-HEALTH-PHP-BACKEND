@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="planet_tenna_health@localhost" uuid="13427358-eae7-4f4e-9072-eb98f3f714af">
+    <data-source source="LOCAL" name="planet_tenna_health@localhost" uuid="7ea32473-c4b7-44a6-833e-19f772cd7af0">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
